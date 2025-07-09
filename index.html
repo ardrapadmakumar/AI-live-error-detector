@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spirit FOX</title>
+    <style>
+        body {
+            background-color: #D76F3D;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #FAF5EB;
+            border-radius: 15px;
+        }
+        textarea {
+            width: 90%;
+            height: 100px;
+            background: #9A5735;
+            color: #FFF;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            resize: none;
+        }
+        .filename {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .section-title {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background: #FAF5EB;
+            border: 2px solid black;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #e5dfd6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Spirit FOX</h2>
+        
+        <p class="filename" id="fileName">No file selected</p>
+        
+        <p class="section-title">Original Code:</p>
+        <textarea id="originalCode" readonly>## Original code will appear here...</textarea>
+        
+        <p class="section-title">Corrected Code:</p>
+        <textarea id="correctedCode" readonly>## Corrected code will appear here...</textarea>
+        
+        <br>
+        <button id="uploadBtn">Upload File</button>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+            document.getElementById('fileName').innerText = "Processing...";
+            document.getElementById('originalCode').value = "Processing...";
+            document.getElementById('correctedCode').value = "Processing...";
+
+            const result = await ipcRenderer.invoke('upload-file');
+
+            if (result) {
+                document.getElementById('fileName').innerText = "Selected File: " + result.fileName;
+                document.getElementById('originalCode').value = result.fileContent;
+                document.getElementById('correctedCode').value = result.correctedCode;
+            } else {
+                document.getElementById('fileName').innerText = "No file selected";
+                document.getElementById('originalCode').value = "## Original code will appear here...";
+                document.getElementById('correctedCode').value = "## Corrected code will appear here...";
+            }
+        });
+    </script>
+</body>
+</html>
