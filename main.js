@@ -42,7 +42,7 @@ ipcMain.handle('upload-file', async () => {
 // Send Code to Hugging Face AI for Correction
 async function sendToHuggingFace(code) {
     const API_URL = "https://api-inference.huggingface.co/models/bigcode/starcoder";
-    const headers = { "Authorization": "Bearer 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" };
+    const headers = { "Authorization": "Bearer api_key" };
 
     const data = {
         inputs: `Fix the following code errors and return only the corrected code:\n\n${code}`,
